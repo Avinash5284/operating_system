@@ -1,0 +1,248 @@
+Q1.Explore the following commands with various options, refer man pages for 
+    further help a) date b) cal c) bc d) echo e) who f) whoami g) logname g) uname h)
+    seq i) clear
+=>
+a) date : date
+Wed Sep  9 21:24:55 IST 2020
+
+date +%A
+Wednesday
+
+date +%a
+Wed
+
+ date +%b
+Sep
+
+date +%B
+September
+
+date +%c
+Wed Sep  9 21:26:00 2020
+
+ date +%C
+20
+
+date +%F
+2020-09-09
+
+ date +%d
+09
+
+ date +%D
+09/09/20
+
+date +%D' '+%B' '+%Y
+09/09/20 +September +2020
+
+b)cal:
+#cal
+   September 2020
+Su Mo Tu We Th Fr Sa
+       1  2  3  4  5
+ 6  7  8  9 10 11 12
+13 14 15 16 17 18 19
+20 21 22 23 24 25 26
+27 28 29 30
+
+#cal -m1
+    January 2020
+Su Mo Tu We Th Fr Sa
+          1  2  3  4
+ 5  6  7  8  9 10 11
+12 13 14 15 16 17 18
+19 20 21 22 23 24 25
+26 27 28 29 30 31
+
+#cal 2020 //print whole year
+
+c)bc: (calculator)
+
+ #echo "2^2" | bc
+  4
+
+  # echo "var1=10;var2=20;var1++;++var2"|bc
+10
+21
+
+d)echo:
+#echo "avinash"
+avinash
+
+e)who :
+who command is used to find out the following information :
+1. Time of last system boot
+2. Current run level of the system
+3. List of logged in users and more.
+
+~# w
+ 21:46:08 up 21 min,  0 users,  load average: 0.52, 0.58, 0.59
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+
+f)whomi:
+# whoami
+root
+
+g)logname:
+  
+# logname
+logname: no login name
+
+h)uname:
+   # uname
+   Linux
+
+i) seq : seq command in Linux is used to generate numbers from 
+FIRST to LAST in steps of INCREMENT. It is a very useful command 
+where we had to generate list of numbers in while, for, until loop.
+
+~# seq 10 3 30
+10
+13
+16
+19
+22
+25
+28
+
+Q2. A) Create three directory a b and c and create a.txt,b.txt and c.txt
+    in each directory respectively and then copy c directory into the a.
+    
+    B)Move Directory b to c.
+
+    C)Create alias of ls -lh command to your name.
+
+    D)Change Directory name a to cdac.
+
+=> 
+ A)<!---->
+  
+# mkdir a b c
+
+ # cd a
+ # touch a.txt
+ # cd..
+   
+ # cd b
+ # touch b.txt
+ # cd..
+
+ # cd c
+ # touch c.txt
+ # cd..
+
+B) # mv b c
+
+C)
+
+
+
+Q3. A) Create five files file1.txt , file2.txt ,file3.txt file4.txt and file5.txt with some text inside it. Search for 's' character
+    inside all the files using grep command.
+    Also Use cat to view all file content together.
+	B)Create file.txt using cat and edit that using nano editor.
+	c)Create 5 empty files using touch command
+	D)Remove previously created directory a , b and c.
+=>
+ # cat > file2.txt
+    "hello"
+
+ #cat > file1.txt
+"cdac"
+
+# cat > file3.txt
+"juhu"
+
+#cat > file4.txt
+"mumbai"
+
+#cat > file5.txt
+"sarkar'
+
+# grep 's' file[1-5].txt
+file5.txt:"sarkar'
+
+# cat file?.txt
+"cdac"
+"hello"
+"juhu"
+"mumbai"
+"sarkar'
+
+# nano file.txt
+
+C)
+
+touch a.txt b.txt c.txt d.txt e.txt
+
+
+D)
+# rm -rf a c
+
+Q4. Create a file with some content using vi editor
+	a) Display the file using cat command
+	b) Display line numbers along with content
+	c) Display the file in reverse order using tac
+	d) Combine multiple files using cat command
+=>
+   a)# cat > file.txt
+
+   b)# cat -n file.txt
+     1  "hello"
+
+   c)# tac file.txt
+     "mumbai"
+     "cdac"
+     "hello"
+   d)# cat file1.txt file2.txt
+     "hello"
+
+Q5. Create Random some files and sub directories.
+	a) display files row wise, column wise, 1 per row
+	b) sort the files in ascending, descending order
+	c) Create some hidden files and sub directories and display them using “ls -a”
+	d) Change time stamp of some files and directories using touch command and display the files using ls -t ls -rt
+	e) Recursive display contents of your home directory.
+	f) display all attributes of files and directories using ls -l
+	g) display attributes of a directory using ls -ld
+
+=>
+
+      c)# mkdir .demo
+        ls -a
+       
+      d)# touch demo1.txt
+
+        # stat demo1.txt
+  File: demo1.txt
+  Size: 0               Blocks: 0          IO Block: 4096   regular empty file
+Device: 2h/2d   Inode: 3659174697335997  Links: 1
+Access: (0666/-rw-rw-rw-)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2020-09-09 22:43:31.446951500 +0530
+Modify: 2020-09-09 22:43:31.446951500 +0530
+Change: 2020-09-09 22:43:31.446951500 +0530
+ Birth: -
+   
+e)# ls -r
+home  file5.txt  file4.txt  file3.txt  file2.txt  file1.txt  file.txt  e.txt  demo1.txt  d.txt  c.txt  b.txt  a.txt
+
+f)# ls -l
+total 0
+-rw-rw-rw- 1 root root    0 Sep  9 22:20 a.txt
+-rw-rw-rw- 1 root root    0 Sep  9 22:20 b.txt
+-rw-rw-rw- 1 root root    0 Sep  9 22:20 c.txt
+-rw-rw-rw- 1 root root    0 Sep  9 22:20 d.txt
+-rw-rw-rw- 1 root root    0 Sep  9 22:43 demo1.txt
+-rw-rw-rw- 1 root root    0 Sep  9 22:20 e.txt
+-rw-rw-rw- 1 root root   24 Sep  9 22:32 file.txt
+-rw-rw-rw- 1 root root    0 Sep  9 22:28 file1.txt
+-rw-rw-rw- 1 root root    8 Sep  9 22:04 file2.txt
+-rw-rw-rw- 1 root root    7 Sep  9 22:05 file3.txt
+-rw-rw-rw- 1 root root    9 Sep  9 22:06 file4.txt
+-rw-rw-rw- 1 root root    9 Sep  9 22:06 file5.txt
+drwxrwxrwx 1 root root 4096 Sep  9 22:02 home
+
+g)# ls -ld
+drwx------ 1 root root 4096 Sep  9 22:43 .
+
+
