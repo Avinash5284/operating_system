@@ -1,0 +1,289 @@
+Process Management
+
+Note : 
+1.	Read Man pages of the functions/commands mentioned in the hint of each question. 
+2.	You will get the name of header file to be included for that function to work, 
+in the man page of that respective function. 
+
+Questions : 
+
+1.	Parent and child process 
+Write a C/CPP program to create a child process. Child should print its pid and its 
+parent’s pid and should exit by printing message as “Child Exiting …”. Parent should 
+print its pid and should exit by printing message as “Parent Exiting ..”. 
+(Hint(functions to be used) : getpid, fork, getppid)
+
+(pid_t data type stands for process identification and it is used to represent process 
+ids. Whenever, we want to declare a variable that is going to be deal with the process 
+ids we can use pid_t data type. The type of pid_t data is a signed integer type 
+(signed int or we can say int).)
+
+=> #include<stdio.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<stdlib.h>
+
+int main() {
+
+        pid_t pid;
+
+        pid = fork();
+
+        if ( pid == 0 ) {
+
+               
+                
+		printf("Child's parent process id : %d\n", getppid());
+                printf("Child process id : %d\n", getpid());
+
+        }
+        else if ( pid > 1 ) {
+
+              
+
+                printf("Parent's parent process id : %d\n", getppid());
+                printf("Parent process id : %d\n", getpid());
+
+                //printf("Parent own process id : %d\n", pid);
+
+        }
+        else {
+
+                printf("Creating child process failed.");
+                return -1;
+
+        }
+
+       
+
+return 0;
+}
+
+2.	Scheduling functions 
+Write a program in C/CPP to check the scheduling policy used by the process and its 
+priority. 
+	(Hint(functions to be used) : sched_getscheduler, getpid) 
+=> #include<iostream>
+#include<unistd.h>
+#include<stdlib.h>
+#include<sched.h>
+
+using namespace std;
+
+int main() {
+
+        int pid;
+
+        pid = sched_getscheduler(getpid());
+
+        switch(pid) {
+
+                case SCHED_OTHER:cout<<"Another scheduling policy."<<endl;
+                break;
+                case SCHED_RR:cout<<"Round Robin scheduler."<<endl;
+                break;
+                case SCHED_FIFO:cout<<"First in first out."<<endl;
+                break;
+
+        }
+
+        return 0;
+}
+
+3.	Scheduling functions 
+Write a program in C/CPP to get the current scheduling policy of the process. 
+The program should change the scheduling policy to the other than current one. 
+Program should report errors if it fails to set the new scheduling policy. 
+	(Hint(functions to be used) : sched_setscheduler, getpid) 
+=> #include<iostream>
+#include<stdlib.h>
+#include<sched.h>
+#include<unistd.h>
+
+using namespace std;
+
+int main() {
+
+        int pid;
+
+        pid = sched_setscheduler(getpid(), SCHED_FIFO, 0);
+
+        if( pid == 0 ) {
+
+                cout<<"Priority set."<<endl;
+        }
+        else {
+
+                cout<<"Priority not set."<<endl;
+        }
+
+        return 0;
+}
+
+
+4.	Scheduling algorithm 
+Write a program in C/CPP to take process name, its arrival time and execution/burst 
+time as input. 
+	Use FCFS(non-preemptive) algorithm to calculate wait time of each process, average 
+wait time, turnaround time of each process and average turnaround time. 
+	Calculation of time will start from the arrival time of first process.
+execution/burst time - Time required for execution of process
+	Wait time of process = response time of process - arrival time process
+	Response time of process : time at which process is scheduled to run
+	Average wait time = (sum of wait time of each process) / (number of processes) 
+	Turnaround time of process = (finish/completion time of process) - (arrival time of process)
+	Average turnaround time = (sum of turnaround time of each process) / (number of processes) 
+
+=> #include<iostream>
+#include<unistd.h>
+#include<cstring>
+
+using namespace std;
+
+class Process {
+
+	public : string procName;
+		 int arrTime;
+		 int burstTime;
+		 int respTime;
+		 int compTime;
+		 int waitTime;
+		 int turnTime;
+
+};
+
+
+int main() {
+
+	int input, noProc, avgWaitTime, avgTurnTime, sum1 = 0, sum2 = 0;
+
+	cout<<"Enter the value of number of processes : "<<endl;
+	cin>>noProc;
+
+	Process p[ noProc ];
+
+	for ( input = 0; input < noProc; input++ ) {
+
+		cout<<"Enter the name of process "<<input+1<<" : "<<endl;
+		cin>>p[ input ].procName;
+
+		cout<<"Enter the process "<<input+1<<" arrival time : "<<endl;
+		cin>>p[ input ].arrTime;
+
+		cout<<"Enter the process "<<input+1<<" burst time : "<<endl;
+		cin>>p[ input ].burstTime;
+
+	}
+
+	for ( input = 0; input < noProc; input++ ) {
+
+		if ( input == 0 ) {
+
+			p[input].respTime = p[input].arrTime;
+			p[input].compTime = p[input].respTime + p[input].burstTime;
+			p[input].waitTime = p[input].respTime - p[input].arrTime;
+			p[input].turnTime = p[input].compTime - p[input].arrTime;
+		}
+		else {
+
+			p[input].respTime = p[input-1].respTime + p[input-1].burstTime;
+			p[input].compTime = p[input].respTime + p[input].burstTime;
+			p[input].waitTime = p[input].respTime - p[input].arrTime;
+			p[input].turnTime = p[input].compTime - p[input].arrTime;
+		}
+
+	}
+	for ( int start = 0; start < noProc; start++ ) {
+
+		sum1 = sum1 + p[start].waitTime;
+	  sum2 = sum2 + p[start].turnTime;	
+	}
+
+	avgWaitTime = sum1 / noProc;
+	avgTurnTime = sum2 / noProc;
+
+	for (int start = 0; start < noProc; start++) {
+
+		cout<<"Process no : "<<start+1<<endl;
+		cout<<"Name of process : "<<p[start].procName<<endl;
+		cout<<"Arrival time of process : "<<p[start].arrTime<<endl;
+		cout<<"Burst time of process : "<<p[start].burstTime<<endl;
+		cout<<"Response time of process : "<<p[start].respTime<<endl;
+		cout<<"Completion time of process : "<<p[start].compTime<<endl;
+		cout<<"Waiting time of process : "<<p[start].waitTime<<endl;
+		cout<<"Turnarround time of process : "<<p[start].turnTime<<endl;
+
+	}
+
+	cout<<"Average waiting time : "<<avgWaitTime<<endl;
+	cout<<"Average turnarround time : "<<avgTurnTime<<endl;
+
+	return 0;
+};
+
+/*
+Sample Input 
+			     
+Process	arrival time	 execution/burst time
+P1	0	3
+P2	2	5
+P3	5	6
+
+Sample Output 
+Process	Response time	Completion/finish time	Waiting time	Avg waiting time	Turnaround time	Avg turnaround time
+P1	0	3	0-0 = 0	(0+1+3)/3=4/3	3-0=3	(3+6+9)/3=18/3=6
+P2	3	8	3-2=1		8-2=6	
+P3	8	14	8-5=3		14-5=9	
+*/
+
+Input :
+
+Enter the value of number of processes :
+3
+Enter the name of process 1 :
+P1
+Enter the process 1 arrival time :
+0
+Enter the process 1 burst time :
+3
+Enter the name of process 2 :
+P2
+Enter the process 2 arrival time :
+2
+Enter the process 2 burst time :
+5
+Enter the name of process 3 :
+P3
+Enter the process 3 arrival time :
+5
+Enter the process 3 burst time :
+6
+
+Output :
+
+Process no : 1
+Name of process : P1
+Arrival time of process : 0
+Burst time of process : 3
+Response time of process : 0
+Completion time of process : 3
+Waiting time of process : 0
+Turnarround time of process : 3
+Process no : 2
+Name of process : P2
+Arrival time of process : 2
+Burst time of process : 5
+Response time of process : 3
+Completion time of process : 8
+Waiting time of process : 1
+Turnarround time of process : 6
+Process no : 3
+Name of process : P3
+Arrival time of process : 5
+Burst time of process : 6
+Response time of process : 8
+Completion time of process : 14
+Waiting time of process : 3
+Turnarround time of process : 9
+Average waiting time : 1
+Average turnarround time : 6
